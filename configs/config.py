@@ -3,7 +3,7 @@ import logging
 
 def load_config():
     try:
-        with open("/Users/shubhamchandel/airflow/config/config.yaml", 'r') as yaml_file:
+        with open("/Users/shubhamchandel/airflow/configs/config.yaml", 'r') as yaml_file:
             config = yaml.safe_load(yaml_file)
         return config
 
@@ -13,7 +13,7 @@ def load_config():
 
 def load_db_config():
     try:
-        with open('/Users/shubhamchandel/airflow/config/config.yaml', 'r') as file:
+        with open('/Users/shubhamchandel/airflow/configs/config.yaml', 'r') as file:
             config = yaml.safe_load(file)
 
         mysql_config = config['mysql']

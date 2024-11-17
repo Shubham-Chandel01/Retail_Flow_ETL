@@ -27,7 +27,7 @@ def filter_outliers(df: DataFrame) -> DataFrame:
 # Function to remove duplicates
 def remove_duplicates(df: DataFrame) -> DataFrame:
     try:
-        df_cleaned = df.dropDuplicates(["InvoiceNo"])
+        df_cleaned = df.dropDuplicates(["InvoiceNo","StockCode"])
         logging.info("Duplicates removed based on InvoiceNo.")
         return df_cleaned
 
@@ -45,4 +45,32 @@ def handle_missing_values(df: DataFrame) -> DataFrame:
 
     except Exception as e:
         logging.error(f"Error handling missing values: {e}")
+        raise
+
+# Function to clean Description
+def clean_description(df: DataFrame) :
+    try:
+        # Replace multiple spaces
+        df_cleaned = df.withColumn("Description", F.regexp_replace("Description", r"\s{2,}", " "))
+        # Trim spaces
+        df_cleaned = df_cleaned.withColumn("Description", F.trim(F.col("Description")))
+        logging.info("Description cleaned: Excessive spaces and special characters removed.")
+        return df_cleaned
+
+    except Exception as e:
+        logging.error(f"Error cleaning Description: {e}")
+        raise
+
+
+def clean_invoice_and_stockcode(df: DataFrame):
+    try:
+        # should only contain integers in invoice numbers
+        df_cleaned = df.withColumn("InvoiceNo", F.regexp_replace("InvoiceNo", r"[^0-9]", ""))
+        # only alphanumeric allowed
+        df_cleaned = df_cleaned.withColumn("StockCode", F.regexp_replace("StockCode", r"[^A-Za-z0-9]", ""))
+        logging.info("Invoice and stock code columns cleaned")
+        return df_cleaned
+
+    except Exception as e:
+        logging.error(f"Error cleaning StockCode: {e}")
         raise

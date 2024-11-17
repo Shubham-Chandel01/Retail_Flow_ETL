@@ -5,7 +5,6 @@ import logging
 
  # function to calculate total spend on every transaction
 def total_spend_per_transaction( df: DataFrame) -> DataFrame:
-
     try:
         df_cleaned = df.withColumn("TotalSpend", F.round(df.Quantity * df.UnitPrice, 2))
         return df_cleaned
