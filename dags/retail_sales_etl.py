@@ -2,14 +2,13 @@ from airflow import DAG
 from datetime import datetime, timedelta
 from airflow.providers.apache.spark.operators.spark_submit import SparkSubmitOperator
 from airflow.providers.mysql.operators.mysql import MySqlOperator
-
+from config.config import  load_config , load_sql_from_file
 
 default_args = {
     'owner': 'Airflow',
     'retries': 1,
     'retry_delay': timedelta(seconds=4)
 }
-
 
 with DAG(
     'retail_sales_etl',
@@ -35,57 +34,40 @@ with DAG(
         env_vars={'PYTHONPATH': '/Users/shubhamchandel/airflow'}
     )
 
+    #load config
+    config = load_config()
+    product_dim_path = config['sql_files']['create_product_dim']
+    customer_dim_path = config['sql_files']['create_customer_dim']
+    dim_sql_path = config['sql_files']['create_date_dim']
+    sales_fact_sql_path = config['sql_files']['create_sales_fact']
 
+    create_product_dim_sql = load_sql_from_file(product_dim_path)
+    create_customer_dim_sql = load_sql_from_file(customer_dim_path)
+    create_date_dim_sql = load_sql_from_file(dim_sql_path)
+    create_sales_fact_sql = load_sql_from_file(sales_fact_sql_path)
 
 create_product_dim = MySqlOperator(
     task_id='create_product_dim',
     mysql_conn_id='mysql_conn',
-    sql='''CREATE TABLE IF NOT EXISTS product_dimension (
-             product_id INT AUTO_INCREMENT PRIMARY KEY,
-             stock_code VARCHAR(255),
-             description VARCHAR(255)
-           );'''
+    sql=create_product_dim_sql
 )
 
 create_customer_dim = MySqlOperator(
     task_id='create_customer_dim',
     mysql_conn_id='mysql_conn',
-    sql='''CREATE TABLE IF NOT EXISTS customer_dimension (
-             customer_id INT AUTO_INCREMENT PRIMARY KEY,
-             customer_number INT,
-             customer_country VARCHAR(255)
-           );'''
+    sql=create_customer_dim_sql
 )
 
 create_date_dim = MySqlOperator(
     task_id='create_date_dim',
     mysql_conn_id='mysql_conn',
-    sql='''CREATE TABLE IF NOT EXISTS date_dimension (
-             date_id INT AUTO_INCREMENT PRIMARY KEY,
-             invoice_date DATETIME,
-             year INT,
-             month INT,
-             day_of_week INT,
-             season VARCHAR(50)
-           );'''
+    sql=create_date_dim_sql
 )
 
 create_fact_table = MySqlOperator(
     task_id='create_sales_fact',
     mysql_conn_id='mysql_conn',
-    sql='''CREATE TABLE IF NOT EXISTS retail_sales_fact (
-             fact_id INT AUTO_INCREMENT PRIMARY KEY,
-             invoice_no VARCHAR(255),
-             product_id INT,
-             customer_id INT,
-             quantity INT,
-             unit_price FLOAT,
-             total_spend FLOAT,
-             date_id INT,
-             FOREIGN KEY (product_id) REFERENCES product(product_id),
-             FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
-             FOREIGN KEY (date_id) REFERENCES date(date_id)
-           );'''
+    sql=create_sales_fact_sql
 )
 load_data_spark_job = SparkSubmitOperator(
     task_id='load_data_job',
