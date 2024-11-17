@@ -12,3 +12,4 @@
 __pycache__/
 *.pyc
 *.DS_Store
+/data_profiling/data/retail_data_profiling_report.html
