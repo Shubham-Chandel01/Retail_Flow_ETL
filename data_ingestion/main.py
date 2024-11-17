@@ -1,5 +1,5 @@
 from pyspark.sql import SparkSession
-from config.config import  load_config
+from configs.config import  load_config
 from data.data_loader import get_schema , load_data
 from enums.enums import FileFormat
 import logging

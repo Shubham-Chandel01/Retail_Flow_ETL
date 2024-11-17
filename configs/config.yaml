@@ -1,0 +1,15 @@
+retail_data_file_path : /Users/shubhamchandel/airflow/data/Online Retail.csv
+retail_data_profile_path : /Users/shubhamchandel/airflow/data_profiling/data/retail_data_profiling_report.html
+retail_sales_write_path : /Users/shubhamchandel/airflow/data/output/retail_sales_output
+
+retail_sales_transformed_path : /Users/shubhamchandel/airflow/data/output/retail_sales_transformed
+mysql:
+  url: "jdbc:mysql://localhost:3306/practise"
+  user: "root"
+  password: "root@123"
+
+sql_files:
+  create_product_dim: /Users/shubhamchandel/airflow/sql_queries/create_product_dimension_table.sql
+  create_customer_dim: /Users/shubhamchandel/airflow/sql_queries/create_customer_dimension_table.sql
+  create_date_dim: /Users/shubhamchandel/airflow/sql_queries/create_date_dimension_table.sql
+  create_sales_fact: /Users/shubhamchandel/airflow/sql_queries/create_retail_sales_fact.sql

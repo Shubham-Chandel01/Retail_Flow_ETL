@@ -1,8 +1,10 @@
+import sys
+sys.path.append('/Users/shubhamchandel/airflow')
 from airflow import DAG
 from datetime import datetime, timedelta
 from airflow.providers.apache.spark.operators.spark_submit import SparkSubmitOperator
 from airflow.providers.mysql.operators.mysql import MySqlOperator
-from config.config import  load_config , load_sql_from_file
+from configs.config import load_config , load_sql_from_file
 
 default_args = {
     'owner': 'Airflow',
@@ -71,7 +73,7 @@ create_fact_table = MySqlOperator(
 )
 load_data_spark_job = SparkSubmitOperator(
     task_id='load_data_job',
-    application='/Users/shubhamchandel/airflow/data_loader/main.py',
+    application='/Users/shubhamchandel/airflow/write_to_db/main.py',
     conn_id='spark_local',
     verbose=True,
     env_vars={'PYTHONPATH': '/Users/shubhamchandel/airflow'}

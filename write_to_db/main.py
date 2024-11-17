@@ -1,7 +1,7 @@
 from pyspark.sql import SparkSession
-from config.config import load_config
-from data_loader.db_writer import write_to_mysql
-from data_loader.dim_fact_tables import create_product_dimension, create_customer_dimension, create_date_dimension, \
+from configs.config import load_config
+from write_to_db.db_writer import write_to_mysql
+from write_to_db.dim_fact_tables import create_product_dimension, create_customer_dimension, create_date_dimension, \
     create_retail_sales_fact
 from data.data_loader import  load_parquet_data
 import logging

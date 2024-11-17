@@ -1,5 +1,5 @@
 from pyspark.sql import SparkSession
-from config.config import load_config
+from configs.config import load_config
 from data.data_loader import get_schema , load_data
 from data_transformations.data_cleaner import filter_outliers, remove_duplicates, handle_missing_values, \
     convert_invoice_date_to_timestamp
