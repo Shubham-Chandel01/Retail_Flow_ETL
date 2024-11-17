@@ -5,3 +5,10 @@
 /dags/spark_dag.py
 /dags/spark_sql.py
 /dags/spark_test.py
+/airflow.cfg
+/airflow.db
+/airflow-webserver.pid
+/webserver_config.py
+__pycache__/
+*.pyc
+*.DS_Store
