@@ -1,0 +1,7 @@
+/config/config.yaml
+/file_store/
+/logs/
+/.idea/
+/dags/spark_dag.py
+/dags/spark_sql.py
+/dags/spark_test.py
